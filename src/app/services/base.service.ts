@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { throwError } from 'rxjs';
-import { CookieService } from './cookie.service';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -16,10 +15,6 @@ export class BaseService {
   }
   protected getHeaders() {
     this.httpHeaders = new HttpHeaders().set('Content-Type', 'application/json');
-    const token = CookieService.readCookie('token');
-    if (token) {
-      this.httpHeaders = new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', `JWT ${token}`);
-    }
     return {headers: this.httpHeaders};
   }
   protected postOptions() {
@@ -46,9 +41,6 @@ export class BaseService {
       return throwError({
           message: 'Please check internet connection!'
       });
-    } else if (httpErrorResponse.error.error.message === 'Session expired please re-login.') {
-      CookieService.eraseCookie('token');
-      window.location.href = `http://localhost:4200`;
     }
     return throwError(httpErrorResponse.error.error || {});
   }
