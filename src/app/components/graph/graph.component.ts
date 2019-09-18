@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UploadService } from 'src/app/services/upload.service';
+declare const jQuery: any;
 @Component({
   selector: 'app-graph',
   templateUrl: './graph.component.html',
@@ -8,22 +9,32 @@ import { UploadService } from 'src/app/services/upload.service';
 })
 export class GraphComponent implements OnInit {
   fileForm: FormGroup;
-  constructor(private uploadService: UploadService) { }
+  file: File;
+  filename: string;
+  constructor(private uploadService: UploadService) {
+    this.filename = '';
+  }
 
   ngOnInit() {
     this.fileForm = new FormGroup({
-      equip_file: new FormControl('')
+      equip_file: new FormControl('', [Validators.required])
     });
+  }
+  chooseFile() {
+    jQuery('#fileInput').trigger('click');
   }
   selectFile(files: FileList) {
-    const file: File = files.item(0);
-    this.upload(file);
+    this.file = files.item(0);
+    this.filename = this.file.name;
+    console.log('>>>>>>>>>>>>>> ', this.filename);
   }
-  upload(file) {
-    this.uploadService.upload(file).subscribe((success) => {
-      console.log('>>>>>>>>>>>> ', success);
-    }, (error) => {
-      console.error('>>>>>>>>>>>> ', error);
-    });
+  upload() {
+    if (this.fileForm.valid) {
+      this.uploadService.upload(this.file).subscribe((success) => {
+        console.log('>>>>>>>>>>>> ', success);
+      }, (error) => {
+        console.error('>>>>>>>>>>>> ', error);
+      });
+    }
   }
 }

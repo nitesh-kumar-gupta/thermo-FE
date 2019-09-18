@@ -1,6 +1,17 @@
-<div>
-    <form [formGroup]="fileForm" (ngSubmit)="upload()">
-        <input type="file" name="equip_file" formControlName="equip_file" (change)="selectFile($event.target.files)">
-        <button type="submit" id="upload">Upload</button>
-    </form>
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 offset-md-2 mt-md-5">
+      <div>
+        <form [formGroup]="fileForm" (ngSubmit)="upload()">
+          <input type="file" name="equip_file" formControlName="equip_file" (change)="selectFile($event.target.files)" id="fileInput">
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" [value]="filename" placeholder="Choose file" (click)="chooseFile()" readonly>
+            <div class="input-group-append">
+              <button type="submit" id="upload" class="btn btn-outline-secondary" [disabled]="fileForm.invalid">Upload</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
