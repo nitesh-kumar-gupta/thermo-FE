@@ -37,11 +37,12 @@ export class BaseService {
     return httpResponse['data'] || {};
   }
   protected handleError(httpErrorResponse: HttpErrorResponse) {
-    if (httpErrorResponse.status === 0) {
-      return throwError({
-          message: 'Please check internet connection!'
-      });
-    }
+    // if (httpErrorResponse.status === 0) {
+    //   return throwError({
+    //       message: 'Please check internet connection!'
+    //   });
+    // }
+    console.log('>>>>>>>>>>>> ', httpErrorResponse);
     return throwError(httpErrorResponse.error.error || {});
   }
 }
