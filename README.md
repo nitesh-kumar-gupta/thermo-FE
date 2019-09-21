@@ -24,7 +24,7 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 
 ## Further help
 
-Runn app using cmd npm start.
+Run app using cmd npm start.
 open app in browser using url
 localhost:4200
 Select file by clicking on input box and click upload.
