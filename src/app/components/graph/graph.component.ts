@@ -12,8 +12,15 @@ export class GraphComponent implements OnInit {
   fileForm: FormGroup;
   file: File;
   filename: string;
+  loading: boolean;
+  error: object;
   constructor(private uploadService: UploadService) {
     this.filename = '';
+    this.loading = false;
+    this.error = {
+      status: false,
+      message: ''
+    };
   }
 
   ngOnInit() {
@@ -30,10 +37,25 @@ export class GraphComponent implements OnInit {
   }
   upload() {
     if (this.fileForm.valid) {
+      this.error = {
+        status: false,
+        message: ''
+      };
+      const upload: HTMLElement = document.getElementById('upload');
+      upload.setAttribute('disabled', 'disabled');
+      this.loading = true;
       this.uploadService.upload(this.file).subscribe((success) => {
-        console.log('>>>>>>>>>>>> ', success);
+        upload.removeAttribute('disabled');
+        this.loading = false;
+        console.log('>>>>>>>>>>> ', success);
         this.plotChart(success);
       }, (error) => {
+        upload.removeAttribute('disabled');
+        this.loading = false;
+        this.error = {
+          status: true,
+          message: error.message
+        };
         console.error('>>>>>>>>>>>> ', error);
       });
     }
@@ -42,15 +64,12 @@ export class GraphComponent implements OnInit {
     const myChart: HTMLElement = document.getElementById('myChart');
     let label = [];
     let values = [];
-    for(let d of data) {
+    for (let d of data) {
       label.push(`${d.month}/${d.year}`);
       values.push(d.value);
     }
-    console.log('labellabel ', label, values);
-    new Chart(myChart, {
-      // The type of chart we want to create
+    let c = new Chart(myChart, {
       type: 'line',
-      // The data for our dataset
       data: {
         labels: label,
         datasets: [{

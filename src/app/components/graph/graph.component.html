@@ -15,6 +15,11 @@
     </div>
   </div>
   <div class="row">
-    <canvas id="myChart"></canvas>
+    <div class="col-md-2 offset-md-5" *ngIf="loading">
+      <i class="fa fa-spinner fa-spin"></i>
+    </div>
+    <div class="col-md-12" [class.hide]="loading">
+      <canvas id="myChart"></canvas>
+    </div>
   </div>
 </div>
